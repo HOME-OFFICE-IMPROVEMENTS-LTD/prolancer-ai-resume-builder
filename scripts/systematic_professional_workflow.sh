@@ -80,11 +80,9 @@ print_info "4️⃣ GitHub CLI fallback automation..."
 
 # Check if gh is installed
 if ! command -v gh &> /dev/null; then
-    print_info "Installing GitHub CLI..."
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt update && sudo apt install gh -y
-    print_status "GitHub CLI installed"
+    print_error "GitHub CLI (gh) not found. Please install it to continue."
+    print_info "Installation instructions: https://github.com/cli/cli#installation"
+    exit 1
 fi
 
 # Check authentication
@@ -229,13 +227,22 @@ git add docs/ 2>/dev/null || true
 if git diff --cached --quiet; then
     print_info "No changes to commit"
 else
-    git commit -m "feat: Add automated professional workflow system
+    # 7. STAGE WORKFLOW FILES FOR REVIEW
+print_info "7️⃣ Staging workflow files for your review..."
 
-✅ GitHub CLI integration
-✅ Automated PR creation with professional templates  
-✅ GitHub Actions CI/CD workflows
-✅ Branch protection automation
-✅ Zero human error systematic approach"
+git add .github/
+git add scripts/
+git add docs/ 2>/dev/null || true
+
+if git diff --cached --quiet; then
+    print_info "No changes to stage"
+else
+    print_status "Workflow files staged for review"
+    print_info "Next steps:"
+    print_info "  1. Review changes: git diff --cached"
+    print_info "  2. Commit: git commit -m 'feat: Add professional workflow system'"
+    print_info "  3. Push: git push origin \$(git branch --show-current)"
+fi
     
     git push origin "$(git branch --show-current)"
     print_status "Workflow automation committed and pushed"

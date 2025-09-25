@@ -39,23 +39,10 @@ class AutomatedPRWorkflow:
             print("✅ GitHub CLI detected")
             return True
         else:
-            print("⚠️  Installing GitHub CLI...")
-            self.install_github_cli()
-            return True
-    
-    def install_github_cli(self):
-        """Install GitHub CLI automatically"""
-        commands = [
-            "curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg",
-            "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null",
-            "sudo apt update && sudo apt install gh -y"
-        ]
-        
-        for cmd in commands:
-            print(f"Executing: {cmd}")
-            self.run_command(cmd)
-        
-        print("✅ GitHub CLI installed successfully")
+            print("❌ GitHub CLI (gh) not found. Please install it to continue.")
+            print("Installation: https://github.com/cli/cli#installation")
+            return False
+
     
     def authenticate_github(self):
         """Check GitHub authentication"""
@@ -145,13 +132,24 @@ This PR establishes a secure foundation for:
 """
         
         # Create PR using GitHub CLI
-        pr_command = f'''gh pr create \
-            --title "{pr_title}" \
-            --body "{pr_body}" \
-            --base {self.base_branch} \
-            --head {feature_branch} \
-            --assignee @me \
-            --label "security,enhancement,ready-for-review"'''
+        # Use gh CLI with proper escaping
+        import tempfile
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+            f.write(pr_body)
+            body_file = f.name
+        
+        pr_command = [
+            'gh', 'pr', 'create',
+            '--title', pr_title,
+            '--body-file', body_file,
+            '--base', self.base_branch,
+            '--head', feature_branch,
+            '--assignee', '@me',
+            '--label', 'security,enhancement,ready-for-review'
+        ]
+        
+        stdout, stderr = self.run_command(pr_command)
+        os.unlink(body_file)  # Clean up temp file
         
         print("🚀 Creating automated PR...")
         stdout, stderr = self.run_command(pr_command)
