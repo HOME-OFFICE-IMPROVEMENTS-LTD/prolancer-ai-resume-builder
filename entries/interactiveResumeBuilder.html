@@ -804,7 +804,16 @@
         createComponentWrapper(template, state) {
             const wrapper = document.createElement("div");
             wrapper.className = "dropped-component";
-            wrapper.innerHTML = template;
+            
+            // Use DOMParser for safer HTML template parsing
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(template, 'text/html');
+            const templateContent = doc.body.firstChild;
+            
+            if (templateContent) {
+                wrapper.appendChild(templateContent.cloneNode(true));
+            }
+            
             wrapper.style.position = "relative";
 
             const section = wrapper.querySelector(".resume-section");
@@ -821,16 +830,31 @@
         createDragHandle() {
             const dragHandle = document.createElement("button");
             dragHandle.className = "drag-handle";
-            dragHandle.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="9" cy="6" r="1.5"/>
-                <circle cx="9" cy="12" r="1.5"/>
-                <circle cx="9" cy="18" r="1.5"/>
-                <circle cx="15" cy="6" r="1.5"/>
-                <circle cx="15" cy="12" r="1.5"/>
-                <circle cx="15" cy="18" r="1.5"/>
-            </svg>
-        `;
+            
+            // Create SVG element securely
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("fill", "currentColor");
+            
+            // Create circles for the grip icon
+            const circles = [
+                {cx: "9", cy: "6", r: "1.5"},
+                {cx: "9", cy: "12", r: "1.5"},
+                {cx: "9", cy: "18", r: "1.5"},
+                {cx: "15", cy: "6", r: "1.5"},
+                {cx: "15", cy: "12", r: "1.5"},
+                {cx: "15", cy: "18", r: "1.5"}
+            ];
+            
+            circles.forEach(attrs => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", attrs.cx);
+                circle.setAttribute("cy", attrs.cy);
+                circle.setAttribute("r", attrs.r);
+                svg.appendChild(circle);
+            });
+            
+            dragHandle.appendChild(svg);
             dragHandle.setAttribute("title", "Drag to reorder");
             return dragHandle;
         },
