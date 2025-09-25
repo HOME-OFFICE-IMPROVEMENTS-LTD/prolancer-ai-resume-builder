@@ -72,7 +72,7 @@ This security policy covers:
 
 ## Contact
 
-- **General Security**: security@prolancer.dev
+- **General Security**: info@hoiltd.com
 - **Project Lead**: Available through GitHub repository issues
 - **Organization**: HOME-OFFICE-IMPROVEMENTS-LTD
 
