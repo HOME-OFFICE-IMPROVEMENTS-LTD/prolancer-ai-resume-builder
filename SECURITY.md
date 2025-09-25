@@ -76,4 +76,4 @@ This security policy covers:
 - **Project Lead**: Available through GitHub repository issues
 - **Organization**: HOME-OFFICE-IMPROVEMENTS-LTD
 
-Thank you for helping keep ProLancer AI Resume Builder secure! 
+Thank you for helping keep ProLancer AI Resume Builder secure! 🔒

@@ -688,11 +688,23 @@
             text-align: center;
         `;
 
-            warning.innerHTML = `
-            <p><strong>Content Too Long!</strong></p>
-            <p>Your content exceeds the maximum page height by approximately ${Math.round(exceedingBy)}px.</p>
-            <p>Please reduce content or make sections more concise.</p>
-            <button onclick="this.parentElement.remove()" style="
+            // Secure DOM manipulation - avoid innerHTML injection
+            const warningContent = document.createElement('div');
+
+            const titlePara = document.createElement('p');
+            const titleStrong = document.createElement('strong');
+            titleStrong.textContent = 'Content Too Long!';
+            titlePara.appendChild(titleStrong);
+
+            const detailsPara = document.createElement('p');
+            detailsPara.textContent = `Your content exceeds the maximum page height by approximately ${Math.round(Math.abs(exceedingBy))}px.`;
+
+            const instructionPara = document.createElement('p');
+            instructionPara.textContent = 'Please reduce content or make sections more concise.';
+
+            const dismissButton = document.createElement('button');
+            dismissButton.textContent = 'Dismiss';
+            dismissButton.style.cssText = `
                 margin-top: 0.5rem;
                 padding: 0.25rem 0.5rem;
                 background: #991b1b;
@@ -700,8 +712,19 @@
                 border: none;
                 border-radius: 0.25rem;
                 cursor: pointer;
-            ">Dismiss</button>
-        `;
+            `;
+
+            // Secure event handler
+            dismissButton.addEventListener('click', () => {
+                warning.remove();
+            });
+
+            warningContent.appendChild(titlePara);
+            warningContent.appendChild(detailsPara);
+            warningContent.appendChild(instructionPara);
+            warningContent.appendChild(dismissButton);
+
+            warning.appendChild(warningContent);
 
             document.body.appendChild(warning);
         },
@@ -781,7 +804,16 @@
         createComponentWrapper(template, state) {
             const wrapper = document.createElement("div");
             wrapper.className = "dropped-component";
-            wrapper.innerHTML = template;
+            
+            // Use DOMParser for safer HTML template parsing
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(template, 'text/html');
+            const templateContent = doc.body.firstChild;
+            
+            if (templateContent) {
+                wrapper.appendChild(templateContent.cloneNode(true));
+            }
+            
             wrapper.style.position = "relative";
 
             const section = wrapper.querySelector(".resume-section");
@@ -798,16 +830,31 @@
         createDragHandle() {
             const dragHandle = document.createElement("button");
             dragHandle.className = "drag-handle";
-            dragHandle.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="9" cy="6" r="1.5"/>
-                <circle cx="9" cy="12" r="1.5"/>
-                <circle cx="9" cy="18" r="1.5"/>
-                <circle cx="15" cy="6" r="1.5"/>
-                <circle cx="15" cy="12" r="1.5"/>
-                <circle cx="15" cy="18" r="1.5"/>
-            </svg>
-        `;
+            
+            // Create SVG element securely
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("fill", "currentColor");
+            
+            // Create circles for the grip icon
+            const circles = [
+                {cx: "9", cy: "6", r: "1.5"},
+                {cx: "9", cy: "12", r: "1.5"},
+                {cx: "9", cy: "18", r: "1.5"},
+                {cx: "15", cy: "6", r: "1.5"},
+                {cx: "15", cy: "12", r: "1.5"},
+                {cx: "15", cy: "18", r: "1.5"}
+            ];
+            
+            circles.forEach(attrs => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", attrs.cx);
+                circle.setAttribute("cy", attrs.cy);
+                circle.setAttribute("r", attrs.r);
+                svg.appendChild(circle);
+            });
+            
+            dragHandle.appendChild(svg);
             dragHandle.setAttribute("title", "Drag to reorder");
             return dragHandle;
         },
@@ -889,7 +936,10 @@
         wrapper.remove();
 
         if (!dropZone.querySelector(".dropped-component")) {
-            dropZone.innerHTML = '<span class="placeholder-text">Drop components here</span>';
+            const placeholder = document.createElement("span");
+            placeholder.className = "placeholder-text";
+            placeholder.textContent = "Drop components here";
+            dropZone.appendChild(placeholder);
         }
     }
 
@@ -1329,7 +1379,10 @@
         // Clear button
         const clearBtn = document.getElementById("clearBtn");
         clearBtn.addEventListener("click", () => {
-            dropZone.innerHTML = '<span class="placeholder-text">Drop components here</span>';
+            const placeholder = document.createElement("span");
+            placeholder.className = "placeholder-text";
+            placeholder.textContent = "Drop components here";
+            dropZone.replaceChildren(placeholder);
             state.components = [];
         });
     }
