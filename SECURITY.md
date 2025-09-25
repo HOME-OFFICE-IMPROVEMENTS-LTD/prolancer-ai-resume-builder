@@ -1,41 +1,79 @@
-<!-- BEGIN MICROSOFT SECURITY.MD V0.0.3 BLOCK -->
+# Security Policy
 
-## Security
+## Supported Versions
 
-Microsoft takes the security of our software products and services seriously, which includes all source code repositories managed through our GitHub organizations, which include [Microsoft](https://github.com/Microsoft), [Azure](https://github.com/Azure), [DotNet](https://github.com/dotnet), [AspNet](https://github.com/aspnet), [Xamarin](https://github.com/xamarin), and [our GitHub organizations](https://opensource.microsoft.com/).
+We actively maintain and provide security updates for the following versions of the ProLancer AI Resume Builder:
 
-If you believe you have found a security vulnerability in any Microsoft-owned repository that meets Microsoft's [Microsoft's definition of a security vulnerability](https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc751383(v=technet.10)) of a security vulnerability, please report it to us as described below.
+| Version | Supported          | Status |
+| ------- | ------------------ | ------ |
+| 1.x.x   | :white_check_mark: | Current stable release |
+| 0.9.x   | :white_check_mark: | Beta version (limited support) |
+| < 0.9   | :x:                | No longer supported |
 
-## Reporting Security Issues
+## Reporting a Vulnerability
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+We take security seriously and appreciate your help in keeping ProLancer AI Resume Builder secure.
 
-Instead, please report them to the Microsoft Security Response Center (MSRC) at [https://msrc.microsoft.com/create-report](https://msrc.microsoft.com/create-report).
+### How to Report
 
-If you prefer to submit without logging in, send email to [secure@microsoft.com](mailto:secure@microsoft.com).  If possible, encrypt your message with our PGP key; please download it from the the [Microsoft Security Response Center PGP Key page](https://www.microsoft.com/en-us/msrc/pgp-key-msrc).
+If you discover a security vulnerability, please report it by:
 
-You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Additional information can be found at [microsoft.com/msrc](https://www.microsoft.com/msrc).
+1. **Email**: Send details to `security@prolancer.dev` 
+2. **GitHub**: Create a private security advisory on our repository
+3. **Priority**: Mark as `Security` if using our issue system
 
-Please include the requested information listed below (as much as you can provide) to help us better understand the nature and scope of the possible issue:
+### What to Include
 
-  * Type of issue (e.g. buffer overflow, SQL injection, cross-site scripting, etc.)
-  * Full paths of source file(s) related to the manifestation of the issue
-  * The location of the affected source code (tag/branch/commit or direct URL)
-  * Any special configuration required to reproduce the issue
-  * Step-by-step instructions to reproduce the issue
-  * Proof-of-concept or exploit code (if possible)
-  * Impact of the issue, including how an attacker might exploit the issue
+Please provide the following information:
+- **Description**: Clear explanation of the vulnerability
+- **Steps to Reproduce**: How to trigger the issue
+- **Impact**: Potential security implications
+- **Suggested Fix**: If you have recommendations (optional)
 
-This information will help us triage your report more quickly.
+### Response Timeline
 
-If you are reporting for a bug bounty, more complete reports can contribute to a higher bounty award. Please visit our [Microsoft Bug Bounty Program](https://microsoft.com/msrc/bounty) page for more details about our active programs.
+- **Initial Response**: Within 48 hours of report
+- **Assessment**: Within 7 days we'll provide initial assessment
+- **Resolution**: Security fixes typically deployed within 14 days
+- **Disclosure**: Public disclosure after fix is deployed (coordinated with reporter)
 
-## Preferred Languages
+### What to Expect
 
-We prefer all communications to be in English.
+**If Accepted:**
+- We'll work with you on a fix timeline
+- Credit will be given in our changelog (if desired)
+- We'll keep you updated on progress
 
-## Policy
+**If Declined:**
+- We'll explain why the report doesn't qualify as a security vulnerability
+- We may still address it as a general bug or enhancement
 
-Microsoft follows the principle of [Coordinated Vulnerability Disclosure](https://www.microsoft.com/en-us/msrc/cvd).
+## Security Best Practices
 
-<!-- END MICROSOFT SECURITY.MD BLOCK -->
+For users of ProLancer AI Resume Builder:
+
+- **API Keys**: Never commit GitHub API keys to public repositories
+- **Personal Data**: Resume data is processed locally in your browser
+- **HTTPS**: Always access the application over HTTPS in production
+- **Updates**: Keep your fork updated with the latest security patches
+
+## Scope
+
+This security policy covers:
+- ✅ The main application code
+- ✅ GitHub Models API integration
+- ✅ Local data handling and storage
+- ✅ Export functionality (PDF generation)
+
+**Out of Scope:**
+- ❌ Third-party services (GitHub, browser-specific issues)
+- ❌ User's local environment or network configuration
+- ❌ Social engineering attacks
+
+## Contact
+
+- **General Security**: security@prolancer.dev
+- **Project Lead**: Available through GitHub repository issues
+- **Organization**: HOME-OFFICE-IMPROVEMENTS-LTD
+
+Thank you for helping keep ProLancer AI Resume Builder secure! 🔒
