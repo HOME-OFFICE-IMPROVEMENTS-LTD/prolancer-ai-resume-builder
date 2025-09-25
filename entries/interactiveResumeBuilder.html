@@ -912,7 +912,10 @@
         wrapper.remove();
 
         if (!dropZone.querySelector(".dropped-component")) {
-            dropZone.innerHTML = '<span class="placeholder-text">Drop components here</span>';
+            const placeholder = document.createElement("span");
+            placeholder.className = "placeholder-text";
+            placeholder.textContent = "Drop components here";
+            dropZone.appendChild(placeholder);
         }
     }
 
@@ -1352,7 +1355,11 @@
         // Clear button
         const clearBtn = document.getElementById("clearBtn");
         clearBtn.addEventListener("click", () => {
-            dropZone.innerHTML = '<span class="placeholder-text">Drop components here</span>';
+            dropZone.innerHTML = '';
+            const placeholder = document.createElement("span");
+            placeholder.className = "placeholder-text";
+            placeholder.textContent = "Drop components here";
+            dropZone.appendChild(placeholder);
             state.components = [];
         });
     }
